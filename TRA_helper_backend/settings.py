@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-mxb@!w=#2-$x_sc&w^ucznkdv8n!(eep$hx&yzs_88ii6+y2b)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "accounts",
 ]
 
@@ -69,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-AUTH_USER_MODEL = "accounts.Clerk"  # custom user model
+AUTH_USER_MODEL = "accounts.TRAUser"  # custom user model
 
 WSGI_APPLICATION = "TRA_helper_backend.wsgi.application"
 
