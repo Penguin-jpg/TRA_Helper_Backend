@@ -11,6 +11,7 @@ class TRAUserSerializer(serializers.HyperlinkedModelSerializer):
             "last_name",
             "first_name",
             "identity_number",
+            "password",
             "phone_number",
             "is_visually_impaired",
             "current_station",
