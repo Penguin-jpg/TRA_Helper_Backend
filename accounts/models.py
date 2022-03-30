@@ -3,17 +3,11 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
-    AbstractUser,
-    User,
-    UserManager,
-    Group,
 )
 from django.apps import apps
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import PermissionDenied
-
-STATIONS = ((0, "測試1"), (1, "測試2"))
 
 
 class TRAUserManager(BaseUserManager):
@@ -32,6 +26,7 @@ class TRAUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(identity_number=identity_number, email=email, **extra_fields)
         user.password = make_password(password)
+        print(user.password)
         user.save(using=self._db)
         return user
 
@@ -117,9 +112,6 @@ class TRAUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=10, verbose_name="姓氏")
     phone_number = models.CharField(max_length=10, verbose_name="手機號碼")
     is_visually_impaired = models.BooleanField(default=False, verbose_name="視障人士")
-    current_station = models.IntegerField(
-        null=True, choices=STATIONS, default=0, verbose_name="目前車站"
-    )
 
     USERNAME_FIELD = "identity_number"  # 使用身分證字號登入
     REQUIRED_FIELDS = ["password", "email"]
