@@ -16,33 +16,39 @@ class TRAUserManager(BaseUserManager):
     def get_by_natural_key(self, identity_number):
         return self.get(**{self.model.USERNAME_FIELD: identity_number})
 
-    def _create_user(self, identity_number, email, password, **extra_fields):
+    def _create_user(self, identity_number, password, phone_number, **extra_fields):
         """
-        透過身分證字號、email、密碼來建立使用者
+        透過身分證字號、密碼、手機號碼來建立使用者
         """
         if not identity_number:
             raise ValueError("必須要有身分證字號")
 
-        email = self.normalize_email(email)
-        user = self.model(identity_number=identity_number, email=email, **extra_fields)
+        user = self.model(
+            identity_number=identity_number, phone_number=phone_number, **extra_fields
+        )
         user.password = make_password(password)
-        print(user.password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, identity_number, email=None, password=None, **extra_fields):
+    def create_user(
+        self, identity_number, password=None, phone_number=None, **extra_fields
+    ):
         extra_fields.setdefault("is_superuser", False)
-        return self._create_user(identity_number, email, password, **extra_fields)
+        return self._create_user(
+            identity_number, password, phone_number, **extra_fields
+        )
 
     def create_superuser(
-        self, identity_number, email=None, password=None, **extra_fields
+        self, identity_number, password=None, phone_number=None, **extra_fields
     ):
         extra_fields.setdefault("is_superuser", True)
 
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
-        return self._create_user(identity_number, email, password, **extra_fields)
+        return self._create_user(
+            identity_number, password, phone_number, **extra_fields
+        )
 
     def with_perm(
         self, perm, is_active=True, include_superusers=True, backend=None, obj=None
@@ -107,14 +113,12 @@ class TRAUser(AbstractBaseUser, PermissionsMixin):
         max_length=10, blank=False, unique=True, verbose_name="身分證字號"
     )  # 當做帳號
     password = models.CharField(max_length=128, blank=False, verbose_name="密碼")
-    email = models.EmailField(blank=False, verbose_name="電子信箱")
     first_name = models.CharField(max_length=10, verbose_name="名稱")
     last_name = models.CharField(max_length=10, verbose_name="姓氏")
     phone_number = models.CharField(max_length=10, verbose_name="手機號碼")
-    is_visually_impaired = models.BooleanField(default=False, verbose_name="視障人士")
 
     USERNAME_FIELD = "identity_number"  # 使用身分證字號登入
-    REQUIRED_FIELDS = ["password", "email"]
+    REQUIRED_FIELDS = ["password", "phone_number"]
 
     class Meta:
         verbose_name = "TRA_user"
