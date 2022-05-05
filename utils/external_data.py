@@ -38,15 +38,17 @@ auth = Auth(APP_ID, APP_KEY)
 
 
 def get_stations_data(url):
-    """
-    取得車站相關資料
-    """
     stations_json = request("get", url, headers=auth.get_auth_header()).json()
-    stations_data = {
-        "name": [station["StationName"]["Zh_tw"] for station in stations_json],
-        "x": [station["StationPosition"]["PositionLon"] for station in stations_json],
-        "y": [station["StationPosition"]["PositionLat"] for station in stations_json],
-    }
+    station_names = [station["StationName"]["Zh_tw"] for station in stations_json]
+    station_pos = [
+        (
+            station["StationPosition"]["PositionLat"],  # x座標(經度)
+            station["StationPosition"]["PositionLon"],  # y座標(緯度)
+        )
+        for station in stations_json
+    ]
+    stations_data = {name: pos for name, pos in zip(station_names, station_pos)}
+
     return stations_data
 
 
