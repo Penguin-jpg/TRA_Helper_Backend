@@ -23,17 +23,7 @@ class TicketViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        user_id = kwargs["pk"]
-        user = TRAUser.objects.get(id=user_id)
-        queryset = Ticket.objects.filter(user=user)
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return super().list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         self.get_object()
