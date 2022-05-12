@@ -11,8 +11,12 @@ from .serializers import TRAUserSerializer, EditProfileSerializer
 class TRAUserViewset(viewsets.ModelViewSet):
     queryset = TRAUser.objects.all()
     serializer_class = TRAUserSerializer
-    permission_classes = [permissions.IsAuthenticated]
     lookup_field = "pk"
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
 
 class EditProfileView(
