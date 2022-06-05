@@ -8,7 +8,7 @@ from accounts.views import (
     EditProfileView,
 )
 from tickets.views import TicketViewSet
-from .station_name_to_pos_view import StationNameToPosView
+from .util_views import StationNameToPosView, SelectTrainView
 
 router = DefaultRouter()
 router.register(r"accounts", TRAUserViewset)
@@ -29,4 +29,5 @@ urlpatterns = [
         StationNameToPosView.as_view(),
         name="station-name-to-pos",
     ),
+    path("stations/select-trains/", SelectTrainView.as_view(), name="select-train"),
 ]

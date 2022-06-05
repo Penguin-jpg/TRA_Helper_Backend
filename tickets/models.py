@@ -12,4 +12,4 @@ class Ticket(models.Model):
     end_station = models.IntegerField(choices=STATIONS, default=0, verbose_name="終點站")
     train = models.IntegerField(choices=TRAINS, default=0, verbose_name="車種")
     seat = models.CharField(max_length=15, verbose_name="座位")
-    QR_url = models.URLField(verbose_name="電子車票")
+    QR_url = models.URLField(verbose_name="電子車票", default="www.google.com")
