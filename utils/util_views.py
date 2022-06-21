@@ -1,7 +1,22 @@
 from rest_framework import views
 from rest_framework.response import Response
 from .external_data import STATIONS_DATA, get_selected_trains
-from .choices import STATIONS_LIST, INVERSE_STATIONS_MAP, TRAINS_LIST
+from .choices import STATIONS_LIST, TRAINS_LIST
+
+
+class StationNameView(views.APIView):
+    def get_object(self, index):
+        try:
+            return STATIONS_LIST[index]
+        except IndexError:
+            return "查無此車站"
+
+    def get(self, request, index, format=None):
+        station_name = self.get_object(index)
+        if station_name != "查無此車站":
+            return Response({"station_name": station_name})
+        else:
+            return Response({"detail": "查無此車站"})
 
 
 class StationNameToPosView(views.APIView):
